@@ -1,8 +1,7 @@
 ﻿import React, { useState } from 'react';
 import Button from './Button';
-import '../componentStyles/Lobby.css';
 
-function Lobby({ onCreateRoom, onJoinRoom }) {
+function Lobby({ onCreateRoom, onJoinRoom,errorMessage,onClearError}) {
     const [mode, setMode] = useState('choice');
     const [playerName, setPlayerName] = useState('');
     const [diceCount, setDiceCount] = useState(4);
@@ -21,14 +20,25 @@ function Lobby({ onCreateRoom, onJoinRoom }) {
         onJoinRoom({ roomCode: roomCode.trim().toUpperCase(), playerName: playerName.trim(), diceCount });
     };
 
+    const changeMode = (newMode) => {
+        if (onClearError) onClearError();
+        setMode(newMode);
+    };
+
     return (
         <div className="lobby-box">
             <h1>🎲 Online Zarlar</h1>
 
+            {errorMessage && (
+                <div className="error-badge">
+                    ⚠️ {errorMessage}
+                </div>
+            )}
+
             {mode === 'choice' && (
                 <div className="lobby-actions">
-                    <Button text="Oda Oluştur" onClick={() => setMode('create')} />
-                    <Button text="Odaya Katıl" onClick={() => setMode('join')} />
+                    <Button text="Oda Oluştur" onClick={() => changeMode('create')} />
+                    <Button text="Odaya Katıl" onClick={() => changeMode('join')} />
                 </div>
             )}
 
@@ -59,7 +69,7 @@ function Lobby({ onCreateRoom, onJoinRoom }) {
                         onChange={(e) => setRounds(e.target.value)}
                     />
                     <Button text="Odayı Başlat" type="submit" />
-                    <button type="button" className="back-btn" onClick={() => setMode('choice')}>Geri</button>
+                    <button type="button" className="back-btn" onClick={() => changeMode('choice')}>Geri</button>
                 </form>
             )}
 
@@ -89,7 +99,7 @@ function Lobby({ onCreateRoom, onJoinRoom }) {
                         onChange={(e) => setDiceCount(e.target.value)}
                     />
                     <Button text="Odaya Giriş Yap" type="submit" />
-                    <button type="button" className="back-btn" onClick={() => setMode('choice')}>Geri</button>
+                    <button type="button" className="back-btn" onClick={() => changeMode('choice')}>Geri</button>
                 </form>
             )}
         </div>

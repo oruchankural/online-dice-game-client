@@ -1,7 +1,6 @@
 ﻿import React, { useState } from 'react';
 import Button from './Button';
 import { DiceConstants } from '../constants/DiceConstants';
-import '../componentStyles/PlayerForm.css';
 
 function PlayerForm({ onAddPlayer }) {
     const [name, setName] = useState('');

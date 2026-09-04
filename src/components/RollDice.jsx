@@ -1,19 +1,25 @@
-// src/components/RollDice.jsx
-
 import React from 'react';
 import Lobby from './Lobby';
 import Die from './Die';
 import Button from './Button';
-import { useDiceGame } from '../hooks/useDiceGame';
-import { socket } from '../socket';
-import '../componentStyles/RollDice.css';
+import {useDiceGame} from '../hooks/useDiceGame';
+import {socket} from '../socket';
 
 function RollDice() {
-    const { roomData, lastRollData, createRoom, joinRoom, startGame, rollDice } = useDiceGame();
+    const {
+        roomData,
+        lastRollData,
+        errorMessage,
+        clearErrorMessage,
+        createRoom,
+        joinRoom,
+        startGame,
+        rollDice
+    } = useDiceGame();
 
-    if (!roomData) return <Lobby onCreateRoom={createRoom} onJoinRoom={joinRoom} />;
+    if (!roomData) return <Lobby onCreateRoom={createRoom} onJoinRoom={joinRoom} errorMessage={errorMessage}
+                                 onClearError={clearErrorMessage}/>;
 
-    // 1. OYUN BİTTİ EKRANI
     if (roomData.isGameOver) {
         const winner = [...roomData.players].sort((a, b) => b.totalScore - a.totalScore)[0];
         return (
@@ -21,11 +27,11 @@ function RollDice() {
                 🏆 <h1>OYUN BİTTİ!</h1>
                 <h2>Kazanan: <span className="highlight">{winner.name}</span></h2>
                 <p>Genel Ortalama Skoru: <strong>{winner.totalScore}</strong></p>
+                <button onClick={() => window.location.reload()}>Yeni Oyun Başlat / Katıl</button>
             </div>
         );
     }
 
-    // 2. CANLI OYUN EKRANI
     if (roomData.isGameStarted) {
         const currentPlayer = roomData.players[roomData.activePlayerIndex];
         const isMyTurn = socket.id === currentPlayer.id;
@@ -36,7 +42,8 @@ function RollDice() {
                     <div className="game-header">
                         <h2>Oda Kodu: {roomData.code}</h2>
                         <h3>Round {roomData.currentRound} / {roomData.totalRounds}</h3>
-                        <h3>Sıra: <span className="highlight">{currentPlayer?.name}</span> {isMyTurn && '(SENSİN!)'}</h3>
+                        <h3>Sıra: <span className="highlight">{currentPlayer?.name}</span> {isMyTurn && '(SENSİN!)'}
+                        </h3>
                     </div>
 
                     <div className={`players-grid count-${roomData.players.length}`}>
@@ -54,13 +61,13 @@ function RollDice() {
                                             {lastRollData && (
                                                 <div className="RollDice-container">
                                                     {lastRollData.dice.map((face, idx) => (
-                                                        <Die key={idx} face={face} />
+                                                        <Die key={idx} face={face}/>
                                                     ))}
                                                 </div>
                                             )}
 
                                             {isMyTurn ? (
-                                                <Button text="🎲 Zarları At!" onClick={rollDice} />
+                                                <Button text="🎲 Zarları At!" onClick={rollDice}/>
                                             ) : (
                                                 <p className="waiting-msg">Oyuncunun atması bekleniyor...</p>
                                             )}
@@ -75,7 +82,6 @@ function RollDice() {
         );
     }
 
-    // 3. BEKLEME ODASI
     return (
         <div className="RollDice-wrapper">
             <div className="waiting-room">
@@ -88,11 +94,17 @@ function RollDice() {
                     ))}
                 </ul>
                 {socket.id === roomData.players[0]?.id && (
-                    <Button
-                        text={roomData.players.length < 2 ? 'En Az 2 Oyuncu Bekleniyor...' : '🎮 Oyunu Başlat!'}
-                        onClick={startGame}
-                        disabled={roomData.players.length < 2}
-                    />
+                    <>
+                        <Button
+                            text={roomData.players.length < 2 ? 'En Az 2 Oyuncu Bekleniyor...' : '🎮 Oyunu Başlat!'}
+                            onClick={startGame}
+                            disabled={roomData.players.length < 2}
+                        />
+                        <Button
+                            text="Odayı Terket"
+                            onClick={() => window.location.reload()}
+                        />
+                    </>
                 )}
             </div>
         </div>

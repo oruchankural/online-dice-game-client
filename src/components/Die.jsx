@@ -8,7 +8,6 @@ import {
     faDiceFive,
     faDiceSix
 } from '@fortawesome/free-solid-svg-icons';
-import '../componentStyles/Die.css';
 
 const DICE_ICONS = {
     one: faDiceOne,
