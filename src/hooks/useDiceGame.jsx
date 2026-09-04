@@ -1,5 +1,5 @@
-﻿import { useState, useEffect } from 'react';
-import { socket } from '../socket';
+﻿import {useState, useEffect} from 'react';
+import {socket} from '../socket';
 
 export function useDiceGame() {
     const [roomData, setRoomData] = useState(null);
@@ -11,14 +11,14 @@ export function useDiceGame() {
             console.log("Sunucudan gelen hata:", message);
             setErrorMessage(message);
         };
-        socket.on('room_created', ({ roomData }) =>{
+        socket.on('room_created', ({roomData}) => {
             setErrorMessage(null);
             setRoomData(roomData);
         });
         socket.on('update_room', (updatedRoom) => setRoomData(updatedRoom));
-        socket.on('game_started', (updatedRoom) => setRoomData({ ...updatedRoom }));
-        socket.on('dice_rolled', ({ room, lastRoll }) => {
-            setRoomData({ ...room });
+        socket.on('game_started', (updatedRoom) => setRoomData({...updatedRoom}));
+        socket.on('dice_rolled', ({room, lastRoll}) => {
+            setRoomData({...room});
             setLastRollData(lastRoll);
         });
         socket.on('error_message', handleError);
@@ -39,10 +39,14 @@ export function useDiceGame() {
         setErrorMessage('');
         socket.emit('join_room', data);
     };
-    const startGame = () => roomData && socket.emit('start_game', { roomCode: roomData.code });
+    const startGame = () => {
+        if(roomData){
+            socket.emit('start_game', {roomCode: roomData.code});
+        }
+    }
     const rollDice = () => {
         if (roomData) {
-            socket.emit('roll_dice', { roomCode: roomData.code });
+            socket.emit('roll_dice', {roomCode: roomData.code});
         }
     };
     const clearErrorMessage = () => setErrorMessage(null);

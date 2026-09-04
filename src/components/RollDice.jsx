@@ -17,21 +17,24 @@ function RollDice() {
         rollDice
     } = useDiceGame();
 
-    if (!roomData) return <Lobby onCreateRoom={createRoom} onJoinRoom={joinRoom} errorMessage={errorMessage}
-                                 onClearError={clearErrorMessage}/>;
-
+    if (!roomData) {
+        return <Lobby
+                    onCreateRoom={createRoom}
+                    onJoinRoom={joinRoom}
+                    errorMessage={errorMessage}
+                    onClearError={clearErrorMessage}/>
+    }
     if (roomData.isGameOver) {
         const winner = [...roomData.players].sort((a, b) => b.totalScore - a.totalScore)[0];
         return (
             <div className="game-over-container">
-                🏆 <h1>OYUN BİTTİ!</h1>
+                <h1>OYUN BİTTİ!</h1>
                 <h2>Kazanan: <span className="highlight">{winner.name}</span></h2>
                 <p>Genel Ortalama Skoru: <strong>{winner.totalScore}</strong></p>
                 <button onClick={() => window.location.reload()}>Yeni Oyun Başlat / Katıl</button>
             </div>
         );
     }
-
     if (roomData.isGameStarted) {
         const currentPlayer = roomData.players[roomData.activePlayerIndex];
         const isMyTurn = socket.id === currentPlayer.id;
@@ -81,7 +84,6 @@ function RollDice() {
             </div>
         );
     }
-
     return (
         <div className="RollDice-wrapper">
             <div className="waiting-room">

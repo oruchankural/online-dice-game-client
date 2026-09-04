@@ -1,7 +1,7 @@
 ﻿import React, { useState } from 'react';
 import Button from './Button';
 
-function Lobby({ onCreateRoom, onJoinRoom,errorMessage,onClearError}) {
+function Lobby({onCreateRoom,onJoinRoom,errorMessage,onClearError}) {
     const [mode, setMode] = useState('choice');
     const [playerName, setPlayerName] = useState('');
     const [diceCount, setDiceCount] = useState(4);
@@ -13,13 +13,11 @@ function Lobby({ onCreateRoom, onJoinRoom,errorMessage,onClearError}) {
         if (!playerName.trim()) return;
         onCreateRoom({ playerName: playerName.trim(), diceCount, rounds });
     };
-
     const handleJoin = (e) => {
         e.preventDefault();
         if (!playerName.trim() || !roomCode.trim()) return;
         onJoinRoom({ roomCode: roomCode.trim().toUpperCase(), playerName: playerName.trim(), diceCount });
     };
-
     const changeMode = (newMode) => {
         if (onClearError) onClearError();
         setMode(newMode);
@@ -28,20 +26,17 @@ function Lobby({ onCreateRoom, onJoinRoom,errorMessage,onClearError}) {
     return (
         <div className="lobby-box">
             <h1>🎲 Online Zarlar</h1>
-
             {errorMessage && (
                 <div className="error-badge">
                     ⚠️ {errorMessage}
                 </div>
             )}
-
             {mode === 'choice' && (
                 <div className="lobby-actions">
                     <Button text="Oda Oluştur" onClick={() => changeMode('create')} />
                     <Button text="Odaya Katıl" onClick={() => changeMode('join')} />
                 </div>
             )}
-
             {mode === 'create' && (
                 <form onSubmit={handleCreate} className="lobby-form">
                     <h3>Yeni Oda Oluştur</h3>
@@ -72,7 +67,6 @@ function Lobby({ onCreateRoom, onJoinRoom,errorMessage,onClearError}) {
                     <button type="button" className="back-btn" onClick={() => changeMode('choice')}>Geri</button>
                 </form>
             )}
-
             {mode === 'join' && (
                 <form onSubmit={handleJoin} className="lobby-form">
                     <h3>Odaya Katıl</h3>
