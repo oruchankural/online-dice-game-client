@@ -1,0 +1,25 @@
+﻿button {
+    padding: 12px 30px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
+    background-color: slateblue;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    margin: 10px;
+}
+
+button:hover:not(:disabled) {
+    background-color: #5a4bcf;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+button:disabled {
+    background-color: #a29bfe;
+    cursor: not-allowed;
+    box-shadow: none;
+}
