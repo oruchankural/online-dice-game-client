@@ -26,7 +26,7 @@ function PlayerForm({ onAddPlayer }) {
                 min="1"
                 max="10"
                 value={diceCount}
-                onChange={(e) => setDiceCount(e.target.value)}
+                onChange={(e) => setDiceCount(Number(e.target.value))}
             />
             <Button className="form-submit-button" text="Oyuncu Ekle" type="submit" />
         </form>
