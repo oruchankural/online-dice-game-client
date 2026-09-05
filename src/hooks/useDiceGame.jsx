@@ -3,7 +3,6 @@ import {socket} from '../utils/socket.js';
 
 export function useDiceGame() {
     const [roomData, setRoomData] = useState(null);
-    const [lastRollData, setLastRollData] = useState(null);
     const [errorMessage, setErrorMessage] = useState(null);
 
     useEffect(() => {
@@ -17,9 +16,8 @@ export function useDiceGame() {
         });
         socket.on('update_room', (updatedRoom) => setRoomData(updatedRoom));
         socket.on('game_started', (updatedRoom) => setRoomData({...updatedRoom}));
-        socket.on('dice_rolled', ({room, lastRoll}) => {
+        socket.on('dice_rolled', ({room}) => {
             setRoomData({...room});
-            setLastRollData(lastRoll);
         });
         socket.on('error_message', handleError);
         return () => {
@@ -60,14 +58,12 @@ export function useDiceGame() {
             socket.emit('leave_room', { roomCode: roomData.code });
         }
         setRoomData(null);
-        setLastRollData(null);
         setErrorMessage('');
     };
     const clearErrorMessage = () => setErrorMessage(null);
 
     return {
         roomData,
-        lastRollData,
         errorMessage,
         clearErrorMessage,
         createRoom,

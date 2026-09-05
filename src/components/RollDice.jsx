@@ -8,7 +8,6 @@ import {socket} from '../utils/socket.js';
 function RollDice() {
     const {
         roomData,
-        lastRollData,
         errorMessage,
         clearErrorMessage,
         createRoom,
@@ -29,35 +28,41 @@ function RollDice() {
         );
     }
 
-    if (roomData.isGameOver) {
-        const winner = [...roomData.players].sort((a, b) => b.totalScore - a.totalScore)[0];
-        return (
-            <div className="game-over-container" data-testid="game-over-screen">
-                <h1>OYUN BİTTİ!</h1>
-                <h2>Kazanan: <span className="highlight" data-testid="winner-name">{winner.name}</span></h2>
-                <p>Genel Ortalama Skoru: <strong>{winner.totalScore}</strong></p>
-                <Button text="Yeni Oyun Başlat / Katıl" onClick={resetGame} id="new-game-btn" testId="new-game-btn"/>
-            </div>
-        );
-    }
 
     if (roomData.isGameStarted) {
         const currentPlayer = roomData.players[roomData.activePlayerIndex];
         const isMyTurn = socket.id === currentPlayer.id;
+        const winner = roomData.isGameOver
+            ? [...roomData.players].sort((a, b) => b.totalScore - a.totalScore)[0]
+            : null;
 
         return (
             <div className="RollDice-wrapper" data-testid="game-screen">
                 <div className="game-screen">
                     <div className="game-header">
                         <h2>Oda Kodu: <span data-testid="room-code">{roomData.code}</span></h2>
-                        <h3>Round {roomData.currentRound} / {roomData.totalRounds}</h3>
-                        <h3>Sıra: <span className="highlight">{currentPlayer?.name}</span> {isMyTurn && '(SENSİN!)'}
-                        </h3>
+                        <h3>Round {roomData.currentRound} / {roomData.totalRounds} {roomData.isGameOver ? 'Tamamlandı' : ''}</h3>
+                        {!roomData.isGameOver && (
+                            <h3>Sıra: <span className="highlight">{currentPlayer?.name}</span> {isMyTurn && '(SENSİN!)'}
+                            </h3>
+                        )}
                     </div>
-
+                    {roomData.isGameOver && winner && (
+                        <div className="game-over-container" data-testid="game-over-screen">
+                            <h1>OYUN BİTTİ!</h1>
+                            <h2>Kazanan: <span className="highlight" data-testid="winner-name">{winner.name}</span></h2>
+                            <p>Genel Ortalama Skoru: <strong>{winner.totalScore}</strong></p>
+                            <Button text="Yeni Oyun Başlat / Katıl" onClick={resetGame} id="new-game-btn"
+                                    testId="new-game-btn"/>
+                        </div>
+                    )}
                     <div className={`players-grid count-${roomData.players.length}`}>
                         {roomData.players.map((player, index) => {
                             const isActive = index === roomData.activePlayerIndex;
+                            const playerLastRoll = [...(roomData.rolls || [])]
+                                .reverse()
+                                .find(r => r.playerName === player.name);
+
                             return (
                                 <div key={`${player.id}-${index}`}
                                      className={`player-card ${isActive ? 'active-card' : ''}`}
@@ -66,25 +71,25 @@ function RollDice() {
                                     <p>Zar Sayısı: {player.diceCount}</p>
                                     <p>Ortalama Skor: <strong>{player.totalScore || '-'}</strong></p>
 
-                                    {isActive && (
-                                        <div className="active-dice-area">
-                                            {lastRollData && (
-                                                <div className="RollDice-container" data-testid="dice-container">
-                                                    {lastRollData.dice.map((face, idx) => (
-                                                        <Die key={idx} face={face}/>
-                                                    ))}
-                                                </div>
-                                            )}
+                                    <div className="active-dice-area">
+                                        {playerLastRoll && (
+                                            <div className="RollDice-container" data-testid="dice-container">
+                                                {playerLastRoll.dice.map((face, idx) => (
+                                                    <Die key={idx} face={face}/>
+                                                ))}
+                                            </div>
+                                        )}
 
-                                            {isMyTurn ? (
+                                        {isActive && !roomData.isGameOver && (
+                                            isMyTurn ? (
                                                 <Button text="🎲 Zarları At!" onClick={rollDice} id="roll-dice-btn"
                                                         testId="roll-dice-btn"/>
                                             ) : (
                                                 <p className="waiting-msg" data-testid="waiting-msg">Oyuncunun atması
                                                     bekleniyor...</p>
-                                            )}
-                                        </div>
-                                    )}
+                                            )
+                                        )}
+                                    </div>
                                 </div>
                             );
                         })}

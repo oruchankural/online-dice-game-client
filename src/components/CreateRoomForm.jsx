@@ -38,6 +38,7 @@ function CreateRoomForm({ onSubmit, onBack }) {
     return (
         <form onSubmit={handleSubmit} className="lobby-form" noValidate>
             <h3>Yeni Oda Oluştur</h3>
+            <label htmlFor="playerName">Oyuncu Adı</label>
             <input
                 type="text"
                 name="playerName"
@@ -67,7 +68,7 @@ function CreateRoomForm({ onSubmit, onBack }) {
                 onChange={handleChange}
             />
             {errorMessage && <p className="error-message" data-testid="form-error-message">{errorMessage}</p>}
-            <Button text="Odayı Başlat" id="start-room-btn" testId="start-room-btn" type="submit" />
+            <Button text="Odayı Başlat" id="start-room-btn" testId="start-room-btn" type="submit"/>
             <button type="button" className="back-btn" onClick={onBack}>Geri</button>
         </form>
     );
