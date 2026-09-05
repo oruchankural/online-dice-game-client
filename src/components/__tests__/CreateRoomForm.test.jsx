@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import CreateRoomForm from './CreateRoomForm';
+import CreateRoomForm from '../CreateRoomForm.jsx';
 
 describe('CreateRoomForm Testleri', () => {
     const mockOnSubmit = jest.fn();
@@ -73,7 +73,7 @@ describe('CreateRoomForm Testleri', () => {
 
         const nameInput = screen.getByPlaceholderText('Oyuncu Adınız');
         const diceInput = screen.getByLabelText('Zar Sayısı:');
-        const roundsInput = screen.getByLabelText('Tur (Round) Sayısı:');
+        const roundsInput = screen.getByLabelText('Tur Sayısı:');
         const submitBtn = screen.getByText('Odayı Başlat');
 
         fireEvent.change(nameInput, { target: { value: '  Kemal  ' } });

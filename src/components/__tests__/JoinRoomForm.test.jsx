@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import JoinRoomForm from './JoinRoomForm';
+import JoinRoomForm from '../JoinRoomForm.jsx';
 
 describe('JoinRoomForm Testleri', () => {
     const mockOnSubmit = jest.fn();
@@ -20,8 +20,7 @@ describe('JoinRoomForm Testleri', () => {
 
         expect(mockOnSubmit).toHaveBeenCalledWith({
             roomCode: 'ABC12',
-            playerName: 'Ahmet',
-            diceCount: 4
+            playerName: 'Ahmet'
         });
     });
 });

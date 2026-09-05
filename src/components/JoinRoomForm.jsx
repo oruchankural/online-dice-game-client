@@ -2,14 +2,11 @@
 import Button from './Button';
 
 function JoinRoomForm({ onSubmit, onBack }) {
-    const [formData, setFormData] = useState({ roomCode: '', playerName: '', diceCount: 4 });
+    const [formData, setFormData] = useState({ roomCode: '', playerName: '' });
 
     const handleChange = (e) => {
-        const { name, value, type } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: type === 'number' ? Number(value) : value
-        }));
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
     const handleSubmit = (e) => {
@@ -18,7 +15,6 @@ function JoinRoomForm({ onSubmit, onBack }) {
         if (!playerName.trim() || !roomCode.trim()) return;
 
         onSubmit({
-            ...formData,
             roomCode: roomCode.trim().toUpperCase(),
             playerName: playerName.trim()
         });
@@ -43,17 +39,7 @@ function JoinRoomForm({ onSubmit, onBack }) {
                 onChange={handleChange}
                 required
             />
-            <label htmlFor="joinDiceCount">Zar Sayınız:</label>
-            <input
-                id="joinDiceCount"
-                type="number"
-                name="diceCount"
-                min="1"
-                max="10"
-                value={formData.diceCount}
-                onChange={handleChange}
-            />
-            <Button text="Odaya Giriş Yap" type="submit" />
+            <Button text="Odaya Giriş Yap" testId="join-room-btn" type="submit" />
             <button type="button" className="back-btn" onClick={onBack}>Geri</button>
         </form>
     );

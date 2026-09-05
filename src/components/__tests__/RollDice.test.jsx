@@ -1,12 +1,12 @@
 ﻿import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import RollDice from './RollDice';
-import { useDiceGame } from '../hooks/useDiceGame';
-import { socket } from '../socket';
+import RollDice from '../RollDice.jsx';
+import { useDiceGame } from '../../hooks/useDiceGame.jsx';
+import { socket } from '../../utils/socket.js';
 
-jest.mock('../hooks/useDiceGame');
-jest.mock('../socket', () => ({
+jest.mock('../../hooks/useDiceGame.jsx');
+jest.mock('../../utils/socket.js', () => ({
     socket: { id: 'player-1' }
 }));
 

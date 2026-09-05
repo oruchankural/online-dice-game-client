@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import Die from './Die';
+import Die from '../Die.jsx';
 
 describe('Die Bileşeni Testleri', () => {
     test('Verilen zar yüzüne (face) göre sorunsuz render olmalı', () => {

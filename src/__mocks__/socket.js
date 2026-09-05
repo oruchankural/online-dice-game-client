@@ -4,6 +4,6 @@
     emit: jest.fn(),
 };
 
-jest.mock('../socket', () => ({
+jest.mock('../utils/socket.js', () => ({
     socket: mockSocket,
 }));

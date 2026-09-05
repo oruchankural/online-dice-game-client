@@ -126,7 +126,7 @@ button:disabled {
     font-weight: 800;
     font-size: 0.95rem;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
 }
 
 .lobby-form input, .form-input {

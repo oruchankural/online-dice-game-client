@@ -2,8 +2,8 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import PlayerForm from './PlayerForm';
-import { DiceConstants } from '../constants/DiceConstants';
+import PlayerForm from '../PlayerForm.jsx';
+import { DiceConstants } from '../../constants/DiceConstants.js';
 
 describe('PlayerForm Bileşeni Testleri', () => {
     const mockOnAddPlayer = jest.fn();

@@ -1,12 +1,14 @@
 ﻿import { renderHook, act } from '@testing-library/react';
 import { useDiceGame } from './useDiceGame';
-import { socket } from '../socket';
+import { socket } from '../utils/socket.js';
 
-jest.mock('../socket', () => ({
+jest.mock('../utils/socket.js', () => ({
     socket: {
         on: jest.fn(),
         off: jest.fn(),
         emit: jest.fn(),
+        connect: jest.fn(),
+        connected: false
     },
 }));
 

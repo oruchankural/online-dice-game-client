@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import Lobby from './Lobby';
+import Lobby from '../Lobby.jsx';
 
 describe('Lobby Entegrasyon Testleri', () => {
     const mockCreateRoom = jest.fn();

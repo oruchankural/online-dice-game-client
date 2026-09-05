@@ -1,5 +1,5 @@
 ﻿import {useState, useEffect} from 'react';
-import {socket} from '../socket';
+import {socket} from '../utils/socket.js';
 
 export function useDiceGame() {
     const [roomData, setRoomData] = useState(null);
@@ -30,12 +30,18 @@ export function useDiceGame() {
             socket.off('error_message', handleError);
         };
     }, []);
-
+    const ensureConnected = () => {
+        if (!socket.connected) {
+            socket.connect();
+        }
+    };
     const createRoom = (data) => {
+        ensureConnected();
         setErrorMessage('');
         socket.emit('create_room', data);
     };
     const joinRoom = (data) => {
+        ensureConnected();
         setErrorMessage('');
         socket.emit('join_room', data);
     };
@@ -49,6 +55,14 @@ export function useDiceGame() {
             socket.emit('roll_dice', {roomCode: roomData.code});
         }
     };
+    const resetGame = () => {
+        if (roomData?.code) {
+            socket.emit('leave_room', { roomCode: roomData.code });
+        }
+        setRoomData(null);
+        setLastRollData(null);
+        setErrorMessage('');
+    };
     const clearErrorMessage = () => setErrorMessage(null);
 
     return {
@@ -59,6 +73,7 @@ export function useDiceGame() {
         createRoom,
         joinRoom,
         startGame,
-        rollDice
+        rollDice,
+        resetGame
     };
 }
